@@ -1,0 +1,17 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+{% load static %}
+
+<div class="main-content">
+    <h2>Blog Posts</h2>
+
+    {% for blogpost in blogposts %}
+        <div class="blogpost-title">
+            <h3><a href="{% url 'blogpost' blogpost.id%}">{{ blogpost.title }}</a></h3>
+        </div>
+
+    {% endfor %}
+</div>
+
+{% endblock content %}

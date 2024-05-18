@@ -1,0 +1,74 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+{% load static %}
+
+{% if coinlist_associative|length != 0 %}
+
+<div class="main-content">
+    <h1 class="title">{{ coinlist_name }}: {{ count }} collected!</h1>
+
+    <form method="GET" class="search-bar">
+        <input type="text" name="search-area" value="{{search_input}}" placeholder="Search coin or issuer!" >
+        <input class="button" type="submit" value="Search">
+    </form>
+
+    <div class="coin-grid">
+            {% for entry in coinlist_associative %}
+                    <div class="coin-card">
+                            <div class="checkbox-container">
+                                    <form method="POST">
+                                            {% csrf_token %}
+                                            <input type="checkbox" id="caught-checkbox-{{ entry.id }}" class="caught-checkbox" data-entry-id="{{ entry.id }}" {% if entry.isCaught %}checked{% endif %}>
+                                            <label for="caught-checkbox-{{ entry.id }}"></label>
+                                    </form>
+                            </div>
+                            
+                            <a href="{% url 'coin' entry.coin.id %}">
+                                <img src="{% static '/resources/coin.png' %}" alt="Coin Image" style="width:150px; height:150px;">
+                            </a>
+                            <a href="{% url 'coin' entry.coin.id %}">{{entry.coin.title}}</a>
+                            <!-- de mofi  -->
+                            
+                    </div>
+            {% empty %}
+                    <p>No coins in your list!</p>
+            {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<div class="main-content"> 
+    <h1 class="title"> Oops, you have no coinlist!<br><br>No coins found. </h1>
+</div>
+{% endif %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+$(document).ready(function() {
+    $('.caught-checkbox').change(function() {
+        var entryId = $(this).data('entry-id');
+        var isCaught = $(this).is(':checked');
+        if (!isCaught) {
+            isCaught = false;
+        }
+        $.ajax({
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            url: '{% url "update_is_caught" %}',
+            type: 'POST',
+            data: {entry_id: entryId, is_caught: isCaught},
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+        location.reload();
+    });
+});
+
+</script>
+{% endblock content %}

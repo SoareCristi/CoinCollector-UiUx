@@ -1,0 +1,32 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<div class="main-content">
+    <h2>Currency Conversion</h2>
+
+    <form method="post" action="{% url 'currency_conversion' %}">
+        {% csrf_token %}
+        <h3>Convert Currency</h3>
+        {{ currency_conversion_form.as_p }}
+
+        <button type="submit">Convert</button>
+
+        {% if converted_amount %}
+            <p><strong>Converted Amount:</strong> {{ converted_amount }}</p>
+        {% endif %}
+    </form>
+
+    <form method="post" action="{% url 'currency_conversion' %}">
+        {% csrf_token %}
+        <h3>Get Coin Value</h3>
+        {{ coin_value_form.as_p }}
+
+        <button type="submit">Get Value</button>
+
+        {% if coin_value %}
+            <p><strong>Coin Value:</strong> {{ coin_value }}</p>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock content %}

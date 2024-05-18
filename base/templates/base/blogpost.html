@@ -1,0 +1,12 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+{% load static %}
+
+<div class="main-content">
+    <h2>{{ blogpost.title }}</h2>
+    <p><strong>Author:</strong> {{ blogpost.user.username }}</p>
+    <p><strong>Content:</strong> {{ blogpost.body }}</p>
+</div>
+
+{% endblock content %}
