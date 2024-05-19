@@ -3,15 +3,36 @@
 
 {% load static %}
 
+<div class="nav-bar">
+    <ul>
+        {% if user.is_authenticated and user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}"><i class="fas fa-cogs"></i> Admin Panel</a></li>
+        {% endif %}
+        <li><a href="{% url 'list' %}"><i class="fas fa-home"></i> CoinCollector</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'currency_conversion' %}">Currency Converter</a></li>
+        {% endif %}
+        <li><a class="active" href="{% url 'blogpost_list' %}">Blog</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-right"><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        {% endif %}
+    </ul>
+</div>
+
 <div class="main-content">
-    <h2>Blog Posts</h2>
-
-    {% for blogpost in blogposts %}
-        <div class="blogpost-title">
-            <h3><a href="{% url 'blogpost' blogpost.id%}">{{ blogpost.title }}</a></h3>
-        </div>
-
-    {% endfor %}
+    <div class="blogpost-grid">
+        {% for blogpost in blogposts %}
+            <div class="blogpost-card">
+                <a href="{% url 'blogpost' blogpost.id %}">
+                    <img src="{% static '/resources/banner1.png' %}" alt="{{ blogpost.title }}">
+                </a>
+                <div class="blogpost-card-content">
+                    <h3><a href="{% url 'blogpost' blogpost.id %}">{{ blogpost.title }}</a></h3>
+                    <p>{{ blogpost.body|truncatewords:20 }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock content %}

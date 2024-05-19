@@ -2,16 +2,38 @@
 {% block content %}
 
 {% load static %}
+
+<div class="nav-bar">
+    <ul>
+        {% if user.is_authenticated and user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}"><i class="fas fa-cogs"></i> Admin Panel</a></li>
+        {% endif %}
+        <li><a class="active" href="{% url 'list' %}"><i class="fas fa-home"></i> CoinCollector</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'currency_conversion' %}">Currency Converter</a></li>
+        {% endif %}
+        <li><a href="{% url 'blogpost_list' %}">Blog</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-right"><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        {% endif %}
+    </ul>
+</div>
   
-<div class="main-content">
+<div class="coin-detail-container">
     <div class="coin-detail-card">
         <h2>{{ coin.title }}</h2>
+        <img src="{% static '/resources/coin.png' %}" alt="{{ coin.title }}">
         <p><strong>Issuer:</strong> {{ coin.issuer.name }}</p>
         <p><strong>Minimum Year:</strong> {{ coin.minYear }}</p>
         <p><strong>Maximum Year:</strong> {{ coin.maxYear }}</p>
         <p><strong>Weight:</strong> {{ coin.weight }} grams</p>
         <p><strong>Size:</strong> {{ coin.size }} mm</p>
         <p><strong>URL:</strong> <a href="{{ coin.url }}" target="_blank">{{ coin.url }}</a></p>
-    </div>    
+    </div>
+    
+    <div class="coin-detail-card">
+        <h2>Additional Information</h2>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis neque ducimus est ratione quo ex placeat, qui minus odit fugiat sequi, voluptas quis quisquam beatae delectus doloremque. Ipsa, optio molestias.</p>
+    </div>
 </div>
 {% endblock content %}

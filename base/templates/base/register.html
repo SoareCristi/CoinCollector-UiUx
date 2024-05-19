@@ -1,33 +1,45 @@
 {% extends 'base/main.html' %}
 {% block content %}
 
+<div class="nav-bar">
+    <ul>
+        {% if user.is_authenticated and user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}"><i class="fas fa-cogs"></i> Admin Panel</a></li>
+        {% endif %}
+        <li><a class="active" href="{% url 'list' %}"><i class="fas fa-home"></i> CoinCollector</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'currency_conversion' %}">Currency Converter</a></li>
+        {% endif %}
+        <li><a href="{% url 'blogpost_list' %}">Blog</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-right"><a href="{% url 'logout' %}"> <i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        {% endif %}
+    </ul>
+</div>
+
 <div class="center-container">
-<div class="login-register-container">
-    <div class="header-bar">
-        <h1>Register</h1>
-    </div>
-    
-    <div class="card-body">
-        <form method="POST">
-            {% csrf_token %}
-            <label>{{form.username.label}}</label>
-            {{form.username}}
-    
-            <label>{{form.password1.label}}</label>
-            {{form.password1}}
-            <div class="help-pass-list-container">{{ form.password1.help_text }}</div>
+    <div class="login-register-container">
+        <div class="header-bar">
+            <h1>Register</h1>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <label>{{ form.username.label }}</label>
+                {{ form.username }}
 
-            <label>{{form.password2.label}}</label>
-            {{form.password2}}
-            <p class="help-pass">{{ form.password2.help_text }}</p>
+                <label>{{ form.password1.label }}</label>
+                {{ form.password1 }}
+                <div class="help-pass-list-container">{{ form.password1.help_text }}</div>
 
-            <input style="margin-top:10px ;" class="button" type="submit" value="Register">
+                <label>{{ form.password2.label }}</label>
+                {{ form.password2 }}
+                <p class="help-pass">{{ form.password2.help_text }}</p>
 
-            {{form.}}
-        </form>
-        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                <input class="button" type="submit" value="Register">
+            </form>
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
     </div>
 </div>
-</div>
-
 {% endblock content %}

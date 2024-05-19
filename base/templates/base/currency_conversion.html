@@ -1,32 +1,52 @@
 {% extends 'base/main.html' %}
 {% block content %}
 
+<div class="nav-bar">
+    <ul>
+        {% if user.is_authenticated and user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}"><i class="fas fa-cogs"></i> Admin Panel</a></li>
+        {% endif %}
+        <li><a href="{% url 'list' %}"><i class="fas fa-home"></i> CoinCollector</a></li>
+        {% if user.is_authenticated %}
+            <li><a class="active" href="{% url 'currency_conversion' %}">Currency Converter</a></li>
+        {% endif %}
+        <li><a href="{% url 'blogpost_list' %}">Blog</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-right"><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        {% endif %}
+    </ul>
+</div>
+
 <div class="main-content">
-    <h2>Currency Conversion</h2>
+    <div class="currency-conversion-container">
+        <div class="currency-card">
+            <form method="post" action="{% url 'currency_conversion' %}">
+                {% csrf_token %}
+                <h3>Convert Currency</h3>
+                {{ currency_conversion_form.as_p }}
 
-    <form method="post" action="{% url 'currency_conversion' %}">
-        {% csrf_token %}
-        <h3>Convert Currency</h3>
-        {{ currency_conversion_form.as_p }}
+                <button type="submit">Convert</button>
 
-        <button type="submit">Convert</button>
+                {% if converted_amount %}
+                    <p><strong>Converted Amount:</strong> {{ converted_amount }}</p>
+                {% endif %}
+            </form>
+        </div>
 
-        {% if converted_amount %}
-            <p><strong>Converted Amount:</strong> {{ converted_amount }}</p>
-        {% endif %}
-    </form>
+        <div class="currency-card">
+            <form method="post" action="{% url 'currency_conversion' %}">
+                {% csrf_token %}
+                <h3>Get Coin Value</h3>
+                {{ coin_value_form.as_p }}
 
-    <form method="post" action="{% url 'currency_conversion' %}">
-        {% csrf_token %}
-        <h3>Get Coin Value</h3>
-        {{ coin_value_form.as_p }}
+                <button type="submit">Get Value</button>
 
-        <button type="submit">Get Value</button>
-
-        {% if coin_value %}
-            <p><strong>Coin Value:</strong> {{ coin_value }}</p>
-        {% endif %}
-    </form>
+                {% if coin_value %}
+                    <p><strong>Coin Value:</strong> {{ coin_value }}</p>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
